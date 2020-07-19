@@ -9,11 +9,8 @@ import pyqtgraph as pg
 from pyqtgraph.Qt import QtCore, QtGui
 import numpy as np
 import data
-from queue import  Queue
-
-#qmaxsize = 100
-#q = Queue(maxsize= qmaxsize)
-
+#from queue import  Queue
+#pg.examples.run()
 
 def set_value(buf):
     q = buf
@@ -29,12 +26,13 @@ win.setWindowTitle('pyqtgraph example: Scrolling Plots')
 #    In these examples, the array size is fixed.
 p1 = win.addPlot(title='实时u')
 p2 = win.addPlot(title='实时v')
-#data1 = data.initdata()
-#data1 = np.empty(100)
+
 curve1 = p1.plot()
+curve1_a = p1.plot(pen=(0,255,0), name='average')
 curve2 = p2.plot()
 ptr1 = 0
 section = 100
+average_section = 10
 
 def update1():
     global ptr1, datau, datav
@@ -43,7 +41,15 @@ def update1():
                             # (see also: np.roll)
     if ptr1 > section:
         curve1.setData(datau[ptr1-section: ptr1])
+        data.u_a.append(sum(datau[ptr1-average_section: ptr1])/average_section)
+        curve1_a.setData(data.u_a[ptr1-section: ptr1])
+        #curve1_a.setData(sum(datau[ptr1-section: ptr1]))
         curve2.setData(datav[ptr1-section: ptr1])
+    elif (ptr1 < section) & (ptr1 > average_section):
+        data.u_a.append(sum(datau[ptr1-average_section: ptr1])/average_section)
+        curve1.setData(datau)
+        curve1_a.setData(data.u_a[ptr1-section: ptr1])
+        curve2.setData(datav)
     else:
         curve1.setData(datau)
         curve2.setData(datav)

@@ -10,6 +10,7 @@ def initdata():
 global u, v
 u = []
 v = []
+u_a = []
 qmaxsize = 100
 q = Queue(maxsize = qmaxsize)
 
@@ -20,5 +21,10 @@ def change_uv(uu, vv):
 
 def obtain_uv():
     return u, v
+
+
+def obtain_uv_a():
+    return u_a
+
 
 #print('data', testdata)
